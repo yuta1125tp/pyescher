@@ -63,34 +63,79 @@ def main():
     """"""
     # load config
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_image", type=Path)
-    parser.add_argument("output_image", type=Path)
-    parser.add_argument("config_json", type=Path)
-    parser.add_argument("--concentric", action="store_true")
-    parser.add_argument("--inverse_mapping", action="store_true")
-    parser.add_argument("--bg_color", nargs=3, type=int, default=[128, 128, 128])
-    parser.add_argument("--tmp_dir", type=Path, default="tmp")
-    parser.add_argument("--min_idx", type=int, default=0)
-    parser.add_argument("--max_idx", type=int, default=8)
+    parser.add_argument(
+        "input_image",
+        type=Path,
+        help="input image path",
+    )
+    parser.add_argument("output_image", type=Path, help="save output image path")
+    parser.add_argument("config_json", type=Path, help="config file path")
+    parser.add_argument(
+        "--concentric",
+        action="store_true",
+        help="change the transformation from spiral to concentric",
+    )
+    parser.add_argument(
+        "--inverse_mapping",
+        action="store_true",
+        help="convert in reverse mapping (recommended)",
+    )
+    parser.add_argument(
+        "--bg_color",
+        nargs=3,
+        type=int,
+        default=[128, 128, 128],
+        help="canvas back ground image",
+    )
+    parser.add_argument(
+        "--tmp_dir",
+        type=Path,
+        default="tmp",
+        help="path to dump tmp files. just for debug.",
+    )
+    parser.add_argument(
+        "--min_idx",
+        type=int,
+        default=0,
+        help="min index for loop. see code for details.",
+    )
+    parser.add_argument(
+        "--max_idx",
+        type=int,
+        default=8,
+        help="max index for loop. see code for details.",
+    )
+    parser.add_argument(
+        "--pre_resize_scale",
+        type=float,
+        default=1.0,
+        help="scale factor for pre-processing. smaller the scale, better processing speed.",
+    )
 
     args = parser.parse_args()
 
     args.tmp_dir.mkdir(exist_ok=True, parents=True)
 
     img = cv2.imread(str(args.input_image))
-    # image_scale = 1.0
-    # img = cv2.resize(img, None, fx=image_scale, fy=image_scale)
 
-    # img = cv2.resize(
-    #     img,
-    #     (200, 200),
-    # )
+    if args.pre_resize_scale != 1:
+        img = cv2.resize(img, None, fx=args.pre_resize_scale, fy=args.pre_resize_scale)
     cv2.imwrite(str(args.tmp_dir / "img_resized.jpg"), img)
 
     config_json = json.loads(args.config_json.read_text())
     logger.info("args")
     for arg in vars(args):
         logger.info("{0:<20}: {1}".format(arg, getattr(args, arg)))
+
+    configs_affect_by_scale = ["C_S", "C_L", "r_1", "r_2"]
+    for key in config_json:
+        if key in configs_affect_by_scale:
+            if isinstance(config_json[key], (tuple, list)):
+                config_json[key] = [
+                    args.pre_resize_scale * elm for elm in config_json[key]
+                ]
+            else:
+                config_json[key] = args.pre_resize_scale * config_json[key]
 
     logger.info("config")
     logger.info(
@@ -158,7 +203,6 @@ def main():
     # 角度のオフセット
     theta = 0
 
-    args.concentric = False
     if args.concentric:
         # 同心円
         alpha = 0
