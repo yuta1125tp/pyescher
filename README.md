@@ -25,6 +25,13 @@ python main.py ^
 |  ぐるぐるしていない  |  ぐるぐるしている  |  もっとぐるぐるしている  |
 |  <img src="imgs/source3.jpg" alt="source image" width=128>  | <img src="imgs/source3.dst.jpg" alt="destination 1" width=128> |　<img src="imgs/source3.dst.2.jpg" alt="destination 2" width=128> |
 
+## 参考
+- [Artful Mathematics: The Heritage of M. C. Escher](http://www.ams.org/notices/200304/fea-escher.pdf)  
+- [A logarithmic image transformation](http://www.josleys.com/article_show.php?id=82)  
+- [エッシャーっぽい絵を生成する「エッシャーくん」を作ってみた。](http://mglab.blogspot.com/2008/09/blog-post_20.html)
+- [複素数の指数関数・対数関数・べき関数](http://www.eng.niigata-u.ac.jp/~nomoto/2.html)
+- [複素数７｜複素平面上の拡大縮小/回転は複素数をかけろ！](https://yama-taku.science/mathematics/complex-number/rotation-of-points-and-vectors/)
+
 ## メモ  
 [参考文献](http://www.josleys.com/article_show.php?id=82)の式展開を追ったときのメモ。  
 
@@ -138,12 +145,3 @@ $C_L$を大きい正方形の中心、$C_S$を小さい正方形の中心、$\th
     ここで、複素平面での回転とスケールは、複素数の掛け算で処理できることを利用する。
     所望の操作は、$f(\cos\alpha+i\sin\alpha)$で表される複素数をかけることで行える。
     また、 複素数$z=x+iy$の指数関数$\exp(z)$は$\exp(z)=\exp(x+iy)=\exp(x)(\cos y+i\sin y)$と定義されるため、所望の操作は$f(\cos\alpha+i\sin\alpha)=f\exp(0)(\cos\alpha+i\sin\alpha)=f\exp(0+i\alpha)=f\exp(i\alpha)$をかけることに一致することがわかる。
-
-
-
-## 参考
-- [Artful Mathematics: The Heritage of M. C. Escher](http://www.ams.org/notices/200304/fea-escher.pdf)  
-- [A logarithmic image transformation](http://www.josleys.com/article_show.php?id=82)  
-- [エッシャーっぽい絵を生成する「エッシャーくん」を作ってみた。](http://mglab.blogspot.com/2008/09/blog-post_20.html)
-- [複素数の指数関数・対数関数・べき関数](http://www.eng.niigata-u.ac.jp/~nomoto/2.html)
-- [複素数７｜複素平面上の拡大縮小/回転は複素数をかけろ！](https://yama-taku.science/mathematics/complex-number/rotation-of-points-and-vectors/)
