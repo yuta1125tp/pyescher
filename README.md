@@ -1,16 +1,34 @@
 Logarithmic Image Transformation
 ---
 ## これは何？  
-エッシャーくんの記事のリンクが切れていたので再実装。
+画像を螺旋状に変換する[エッシャーくん](http://mglab.blogspot.com/2008/09/blog-post_20.html)のソースコードへのリンクが切れていたので元の文献を参考に実装した。
 
-## 使い方
+## 動作確認  
+* Windows 10  
+* python(3.8.5)  
+
+## 使い方  
 ```cmd
-activate py38
-
+pip install -r requirements.txt
+python main.py ^
+    imgs\source3.jpg ^
+    imgs\source3.dst.jpg ^
+    config.json ^
+    --inverse_mapping ^
+    --bg_color 255 255 255 ^
+    --pre_resize_scale 0.25
 ```
 
-# メモ  
-## Stage 1
+## 処理結果
+|  処理前  |  処理後  |
+| ---- | ---- |
+|  ぐるぐるしていない  |  ぐるぐるしている  |
+|  <img src="imgs/source3.jpg" alt="source image" width=128>  | <img src="imgs/source3.dst.jpg" alt="source image" width=128> |
+
+## メモ  
+[参考文献](http://www.josleys.com/article_show.php?id=82)の式展開を追ったときのメモ。  
+
+### Stage 1
 $\log(z)$で変換する
 （自然対数で処理する。）
 
@@ -24,7 +42,7 @@ $\log(z)=\log(r)+i\theta$
 
 $z \mapsto \log(z/r_1)$で変換すると、外側の円は実数軸=$\log(r_2/r_1)$の縦線に変換され、内側の円は実数軸=0の縦線へ変換されます。
 
-## Stage 2: 回転とスケーリング
+### Stage 2: 回転とスケーリング
 図3の対角線が虚数軸と一致するように回転させます。
 
 そして、対角線の長さが$2\pi$に一致するように縮めます。
@@ -36,7 +54,7 @@ $z \mapsto \log(z/r_1)$で変換すると、外側の円は実数軸=$\log(r_2/r
 次のステージでは、フェーズ１の対数変換の逆変換を行います。
 
 
-## Stage 3: べき乗
+### Stage 3: べき乗
 次に、図4の矩形を$z\mapsto \exp(z)$の変換で変換します。これにより図5の状況になります。
 
 図4の矩形のすべての辺は、螺旋状に変換されます。ここで、ポイントAとA’はそれぞれ$2i$と$0$から各々1へ変換されるため、一致します。
@@ -88,7 +106,7 @@ $C_L$を大きい正方形の中心、$C_S$を小さい正方形の中心、$\th
 最後に、変換は任意の形に適用できます。 この場合、問題の形状を完全に透明にする必要がある。
 次に、画像ファイルのアルファチャンネルを読み取ることで、アルゴリズムに形状の縁を見つけさせることができます。透過ピクセルのアルファチャンネルの値はゼロなので、単純なアルゴリズムでリムの位置を見つけることができます。図２４は、これを説明するための一連の画像を示している。右側の画像の壁の上の領域をまず透明にして、中央の画像を得ます。次に、透明領域内の点を選択し、大きさを決定します。これにより、透明領域の外側に同様の領域（透明画像に対して回転させてもよい）ができます。
 
-## 備考：
+### 備考：
 * すべてのステージを組み合わせると$z \mapsto (z/r_1)^\beta$になる。
     
     1. $z\mapsto \log(z/r_1)$
@@ -123,7 +141,7 @@ $C_L$を大きい正方形の中心、$C_S$を小さい正方形の中心、$\th
 
 
 
-# 参考
+## 参考
 - [Artful Mathematics: The Heritage of M. C. Escher](http://www.ams.org/notices/200304/fea-escher.pdf)  
 - [A logarithmic image transformation](http://www.josleys.com/article_show.php?id=82)  
 - [エッシャーっぽい絵を生成する「エッシャーくん」を作ってみた。](http://mglab.blogspot.com/2008/09/blog-post_20.html)
