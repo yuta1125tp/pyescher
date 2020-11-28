@@ -223,7 +223,7 @@ def main():
         canvas[p_dst[1], p_dst[0], :] = img[p_src[1], p_src[0], :]
 
     cv2.imwrite(str(args.tmp_dir / "result.jpg"), canvas)
-    cv2.imwrite(str(args.output_image), img)
+    cv2.imwrite(str(args.output_image), canvas)
     return 0
 
 
