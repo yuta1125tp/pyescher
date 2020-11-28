@@ -10,6 +10,9 @@ import cv2
 import numpy as np
 import tqdm
 
+from utils import in_range, is_inside_circle, is_outside_circle, xy_to_z, z_to_xy
+
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s : %(levelname)s : %(filename)s #%(lineno)d :%(message)s",
@@ -17,51 +20,7 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 
-def in_range(value, min_v, max_v, is_closed_sectoin=[True, True]):
-    if is_closed_sectoin[0]:
-        if min_v <= value:
-            pass
-        else:
-            return False
-    else:
-        if min_v < value:
-            pass
-        else:
-            return False
-    if is_closed_sectoin[1]:
-        if value <= max_v:
-            pass
-        else:
-            return False
-    else:
-        if value < max_v:
-            pass
-        else:
-            return False
-    return True
-
-
-def xy_to_z(xy: np.ndarray) -> np.ndarray:
-    """return [x,y] * [1,1j]"""
-    return np.dot(xy, np.array([1, 1j]))
-
-
-def z_to_xy(z: np.complex) -> np.ndarray:
-    """"""
-    return np.stack([z.real, z.imag]).T
-
-
-def is_inside_circle(x, y, a, b, c, cx=0, cy=0):
-    return a * (x - cx) ** 2 + b * (y - cy) ** 2 - c ** 2 < 0
-
-
-def is_outside_circle(x, y, a, b, c, cx=0, cy=0):
-    return not is_inside_circle(x, y, a, b, c, cx, cy)
-
-
-def main():
-    """"""
-    # load config
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "input_image",
@@ -71,9 +30,13 @@ def main():
     parser.add_argument("output_image", type=Path, help="save output image path")
     parser.add_argument("config_json", type=Path, help="config file path")
     parser.add_argument(
-        "--concentric",
-        action="store_true",
-        help="change the transformation from spiral to concentric",
+        "--num_spiral",
+        type=int,
+        default=1,
+        help="arguments to determine the complexity of the spiral. "
+        "if you set 2, then the result will be double helix style. "
+        "if you set 0, then the result will be concentric. "
+        "negative value results inverse spiral.",
     )
     parser.add_argument(
         "--inverse_mapping",
@@ -113,7 +76,13 @@ def main():
     )
 
     args = parser.parse_args()
+    return args
 
+
+def main():
+    """"""
+    # load config
+    args = parse_args()
     args.tmp_dir.mkdir(exist_ok=True, parents=True)
 
     img = cv2.imread(str(args.input_image))
@@ -198,17 +167,11 @@ def main():
     img2[is_target_area_mask] = img[is_target_area_mask]
     cv2.imwrite(str(args.tmp_dir / "img_masked.jpg"), img2)
 
-    scale1 = 100
-
     # 角度のオフセット
     theta = 0
 
-    if args.concentric:
-        # 同心円
-        alpha = 0
-    else:
-        # 螺旋
-        alpha = np.arctan(np.log(r_1 / r_2) / (2 * np.pi))
+    alpha = np.arctan(args.num_spiral * np.log(r_1 / r_2) / (2 * np.pi))
+    logger.info(f"{alpha = }")
 
     f = (2 * np.pi) / (2 * np.pi - theta) * np.cos(alpha)
     beta = f * np.exp(1j * alpha)
@@ -250,6 +213,7 @@ def main():
                 xy_list2_shift = z_to_xy(z_src)
                 xy_list2 = xy_list2_shift + center
             else:
+                scale1 = 100
                 xy_list2 = z_to_xy(log_z) * scale1
             xy_list2 = xy_list2.astype(np.int)
 
