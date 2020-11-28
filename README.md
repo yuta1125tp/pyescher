@@ -20,10 +20,10 @@ python main.py ^
 ```
 
 ## 処理結果
-|  処理前  |  処理後  |
-| ---- | ---- |
-|  ぐるぐるしていない  |  ぐるぐるしている  |
-|  <img src="imgs/source3.jpg" alt="source image" width=128>  | <img src="imgs/source3.dst.jpg" alt="source image" width=128> |
+|  処理前  |  処理例1  | 処理例2 |
+| ---- | ---- | ---- |
+|  ぐるぐるしていない  |  ぐるぐるしている  |  もっとぐるぐるしている  |
+|  <img src="imgs/source3.jpg" alt="source image" width=128>  | <img src="imgs/source3.dst.jpg" alt="destination 1" width=128> |　<img src="imgs/source3.dst.2.jpg" alt="destination 2" width=128> |
 
 ## メモ  
 [参考文献](http://www.josleys.com/article_show.php?id=82)の式展開を追ったときのメモ。  
