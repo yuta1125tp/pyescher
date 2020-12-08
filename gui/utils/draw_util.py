@@ -37,6 +37,20 @@ def putlabel(
         )
 
 
+def drawpoly(
+    img, points, color: tuple = (0, 255, 0), thickness: int = 5, **kwargs
+) -> None:
+    for edge in points.toedges(loop_close=True):
+        cv2.line(
+            img,
+            (edge.p0.x, edge.p0.y),
+            (edge.p1.x, edge.p1.y),
+            color,
+            thickness,
+            **kwargs
+        )
+
+
 def drawrect(
     img: np.ndarray, points: CPoints, color=(0, 255, 0), thickness=-1, **kwargs
 ) -> None:
@@ -64,9 +78,13 @@ def drawmesh(img: np.ndarray) -> None:
         cv2.line(img, (x, 0), (x, height - 1), color, thickness)
 
 
-def drawpoints(img: np.ndarray, points: CPoints) -> None:
-    color = (0, 0, 255)
-    thickness = 3
-    size = 3
+def drawpoints(
+    img: np.ndarray,
+    points: CPoints,
+    size: int = 3,
+    color: tuple = (0, 0, 255),
+    thickness: int = 3,
+    **kwargs
+) -> None:
     for _, p in enumerate(points):
-        cv2.circle(img, (p.x, p.y), size, color, thickness)
+        cv2.circle(img, (p.x, p.y), size, color, thickness, **kwargs)

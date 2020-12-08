@@ -5,7 +5,12 @@ from pathlib import Path
 from .datetime_util import get_YmdHMSf_timestamp
 
 
-def init_logging(level: int = logging.INFO, format: str = "%(asctime)s:%(filename)s:L%(lineno)d:%(funcName)s:[%(levelname)s] %(message)s", logfile: Path = None, logdir: Path = Path('logs')) -> None:
+def init_logging(
+    level: int = logging.INFO,
+    format: str = "%(asctime)s:%(filename)s:L%(lineno)d:%(funcName)s:[%(levelname)s] %(message)s",
+    logfile: Path = None,
+    logdir: Path = Path("logs"),
+) -> None:
     """"""
     handlers = [logging.StreamHandler()]
 
@@ -16,8 +21,9 @@ def init_logging(level: int = logging.INFO, format: str = "%(asctime)s:%(filenam
             logfile.parent.mkdir(exist_ok=True, parents=True)
         handlers.append(logging.FileHandler(str(logfile)))
     else:
-        logfile = logdir / 'log.{}.{}.txt'.format(
-            Path(sys.argv[0]).stem, get_YmdHMSf_timestamp())
+        logfile = logdir / "log.{}.{}.txt".format(
+            Path(sys.argv[0]).stem, get_YmdHMSf_timestamp()
+        )
         if len(str(logfile.parent)):
             logfile.parent.mkdir(exist_ok=True, parents=True)
         handlers.append(logging.FileHandler(str(logfile)))

@@ -11,14 +11,14 @@ class CPoint(object):
 
     def __str__(self) -> str:
         res = self.__class__.__name__
-        res += ' (x, y) = ({}, {})'.format(self._x, self._y)
+        res += " (x, y) = ({}, {})".format(self._x, self._y)
         return res
 
     def __len__(self) -> int:
         return self.dims
 
     def dist(self, x: float, y: float) -> float:
-        return ((self._x - x)**2 + (self._y - y)**2)**0.5
+        return ((self._x - x) ** 2 + (self._y - y) ** 2) ** 0.5
 
     def setxy(self, x: float, y: float) -> None:
         self._x = x
@@ -36,10 +36,10 @@ class CPoint(object):
         return [self._x, self._y]
 
     # def dot(self, point: CPoint) -> float:
-    def dot(self, point: 'CPoint') -> float:
-        """in Python<3.7 we cannot attnotate class using itself.  
-        [ref](https://stackoverflow.com/a/33533514)  
-        once it move to 3.7 we can fix this behavior.  
+    def dot(self, point: "CPoint") -> float:
+        """in Python<3.7 we cannot attnotate class using itself.
+        [ref](https://stackoverflow.com/a/33533514)
+        once it move to 3.7 we can fix this behavior.
         ```python
         from __future__ import annotations
         ...
@@ -48,7 +48,7 @@ class CPoint(object):
 
         ```
         """
-        return self.x*point.x + self.y*point.y
+        return self.x * point.x + self.y * point.y
 
 
 def main():

@@ -61,3 +61,8 @@ def xy_locate_in_rect(x: float, y: float, points: CPoints):
         return False
     xmin, xmax, ymin, ymax = get_rect_xy(points)
     return xmin <= x and x < xmax and ymin <= y and y < ymax
+
+
+def xy_locate_in_poly(x: float, y: float, points: CPoints):
+    xmin, xmax, ymin, ymax = get_rect_xy(points)
+    return xmin <= x and x < xmax and ymin <= y and y < ymax

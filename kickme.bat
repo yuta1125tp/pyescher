@@ -4,4 +4,4 @@ python main.py ^
     config.json ^
     --inverse_mapping ^
     --bg_color 255 255 255 ^
-    --pre_resize_scale 0.25
+    --pre_resize_scale 1
